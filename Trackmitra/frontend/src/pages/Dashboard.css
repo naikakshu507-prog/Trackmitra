@@ -1,0 +1,168 @@
+.dashboard { max-width: 1000px; }
+
+/* ── Header ── */
+.dash-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.dash-greeting { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 2px; }
+.dash-name     { font-size: 2rem; letter-spacing: -0.5px; margin-bottom: 4px; }
+.dash-time     { font-size: 0.82rem; color: var(--text-dim); }
+
+.live-badge {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(16,185,129,0.1);
+  border: 1px solid rgba(16,185,129,0.2);
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--green);
+}
+
+/* ── Tip ── */
+.tip-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  margin-bottom: 28px;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  border-left: 3px solid var(--primary);
+  transition: all 0.4s;
+}
+.tip-icon { font-size: 1.2rem; flex-shrink: 0; }
+
+/* ── Section titles ── */
+.section-title { font-size: 1.2rem; margin-bottom: 4px; letter-spacing: -0.3px; }
+.section-sub   { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px; }
+
+/* ── Big Vehicle Cards ── */
+.dash-vehicles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.dv-card {
+  position: relative;
+  padding: 24px 20px;
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border: 1px solid var(--card-border);
+  transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s, background 0.25s;
+}
+
+.dv-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--vc);
+  background: var(--vcbg);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3), 0 0 30px color-mix(in srgb, var(--vc) 15%, transparent);
+}
+
+.dv-glow {
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 120px; height: 120px;
+  background: var(--vc);
+  border-radius: 50%;
+  opacity: 0;
+  filter: blur(50px);
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.dv-card:hover .dv-glow { opacity: 0.15; }
+
+.dv-icon { font-size: 2.4rem; flex-shrink: 0; transition: transform 0.25s; }
+.dv-card:hover .dv-icon { transform: scale(1.1); }
+
+.dv-info { flex: 1; min-width: 0; }
+.dv-info h3 { font-size: 1.05rem; margin-bottom: 3px; }
+.dv-info p  { font-size: 0.78rem; color: var(--text-muted); }
+
+.dv-live {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  flex-shrink: 0;
+}
+
+.dv-arrow {
+  font-size: 1.1rem;
+  color: var(--text-dim);
+  transition: transform 0.25s, color 0.25s;
+  flex-shrink: 0;
+}
+.dv-card:hover .dv-arrow { transform: translateX(4px); color: var(--vc); }
+
+/* ── Stats ── */
+.dash-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.stat-card-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.stat-card-info { flex: 1; display: flex; flex-direction: column; }
+.stat-card-value { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; line-height: 1; }
+.stat-card-label { font-size: 0.72rem; color: var(--text-muted); }
+
+/* ── Quick links ── */
+.quick-links { display: flex; flex-direction: column; gap: 10px; }
+
+.quick-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.quick-card:hover { transform: translateX(4px); }
+
+.quick-icon { font-size: 1.4rem; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: var(--card); border-radius: 10px; flex-shrink: 0; }
+
+.quick-card div { flex: 1; }
+.quick-card strong { display: block; font-size: 0.9rem; margin-bottom: 2px; }
+.quick-card p { font-size: 0.78rem; color: var(--text-muted); }
+
+.arrow { color: var(--text-dim); font-size: 1rem; }
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .dash-vehicles { grid-template-columns: 1fr; }
+  .dash-stats    { grid-template-columns: repeat(2, 1fr); }
+}
