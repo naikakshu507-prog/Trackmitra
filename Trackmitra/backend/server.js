@@ -4,6 +4,7 @@ const socketIo = require('socket.io');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const path = require('path');
 
 dotenv.config();
 
@@ -11,12 +12,12 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: '*',
     methods: ['GET', 'POST'],
   },
 });
 
-app.use(cors({ origin: 'http://localhost:3000' }));
+app.use(cors({ origin: '*' }));
 app.use(express.json());
 
 // Routes
@@ -28,19 +29,22 @@ app.use('/api/auth', authRoutes);
 app.use('/api/transport', transportRoutes);
 app.use('/api/fare', fareRoutes);
 
-app.get('/', (req, res) => res.json({ message: 'CityMove API Running' }));
+// Serve frontend
+app.use(express.static(path.join(__dirname, '../frontend/build')));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
+});
 
 // MongoDB Connection
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/citymove';
 mongoose
   .connect(MONGO_URI)
   .then(() => console.log('✅ MongoDB connected'))
-  .catch((err) => console.log('⚠️  MongoDB not connected (running in demo mode):', err.message));
+  .catch((err) => console.log('⚠️ MongoDB not connected (running in demo mode):', err.message));
 
-// ─── Socket.IO: Real-time vehicle location simulation ───────────────────────
+// Socket.IO: Real-time vehicle location simulation
 const vehicleLocations = {};
 
-// Seed some vehicles
 const vehicles = [
   { id: 'bus-001', type: 'bus', route: 'Route 1', driver: 'Ramesh K.' },
   { id: 'bus-002', type: 'bus', route: 'Route 2', driver: 'Suresh M.' },
@@ -50,7 +54,6 @@ const vehicles = [
   { id: 'rickshaw-002', type: 'rickshaw', route: 'Station Road', driver: 'Ravi D.' },
 ];
 
-// Start positions near a sample city center (e.g., Nagpur)
 const baseCoords = { lat: 21.1458, lng: 79.0882 };
 
 vehicles.forEach((v) => {
@@ -65,7 +68,6 @@ vehicles.forEach((v) => {
   };
 });
 
-// Move vehicles slightly every 3 seconds
 setInterval(() => {
   vehicles.forEach((v) => {
     const loc = vehicleLocations[v.id];
@@ -79,7 +81,6 @@ setInterval(() => {
 
 io.on('connection', (socket) => {
   console.log('🔌 Client connected:', socket.id);
-  // Send all current vehicle positions on connect
   socket.emit('allVehicles', Object.values(vehicleLocations));
 
   socket.on('requestRoute', (data) => {
